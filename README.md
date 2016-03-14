@@ -1,1 +1,1 @@
-# scala-study-group
+# scala-study-group-dortmund
