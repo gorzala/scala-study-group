@@ -1,4 +1,4 @@
-package ssg.cafe
+package ssg.chapter_one
 
 class Cafe {
   def buyCoffee(cc: CreditCard): (Coffee, Charge) = {

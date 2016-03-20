@@ -1,4 +1,4 @@
-import ssg.cafe._
+import ssg.chapter_one._
 
 val myCard = CreditCard("Marc")
 val myCafeBar = new Cafe
@@ -28,6 +28,5 @@ val visaCC = CreditCard("visa")
 val visaCharge1 = Charge(visaCC, 7)
 val visaCharges = List(visaCharge1)
 val totalCharges = visaCharges ::: amexCharges
-
 val coalescedCharges = myCafeBar.coalesce(totalCharges)
 
