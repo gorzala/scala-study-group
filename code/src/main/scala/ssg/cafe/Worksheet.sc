@@ -31,6 +31,3 @@ val totalCharges = visaCharges ::: amexCharges
 
 val coalescedCharges = myCafeBar.coalesce(totalCharges)
 
-val x = "Hello, World"
-
-val r1 = x.
