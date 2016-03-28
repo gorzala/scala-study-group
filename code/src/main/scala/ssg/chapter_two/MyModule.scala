@@ -37,7 +37,7 @@ object MyModule {
     @annotation.tailrec
     def go(i: Int): Boolean = {
       if (i+1 >= as.length)
-        return true
+        true
       else {
         val x = as(i)
         val y = as(i+1)
@@ -47,11 +47,11 @@ object MyModule {
       }
     }
 
-    go(1)
+    go(0)
   }
 
   def curry[A,B,C](f: (A, B) => C): A => (B => C) = {
-    (a: A) => f(a, _)
+    (a: A) => (b:B) => f(a,b)
   }
 
   def uncurry[A,B,C](func: A => B => C): (A, B) => C = {

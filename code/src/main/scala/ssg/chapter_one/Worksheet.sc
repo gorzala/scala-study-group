@@ -29,4 +29,9 @@ val visaCharge1 = Charge(visaCC, 7)
 val visaCharges = List(visaCharge1)
 val totalCharges = visaCharges ::: amexCharges
 val coalescedCharges = myCafeBar.coalesce(totalCharges)
+def sumCurry(f: Int => Int)(a: Int, b: Int): Int = {
+  if (a > b) 0 else f (a) + sumCurry(f)(a +1, b)
+}
 
+val y = sumCurry(x=>x) _
+y(1,3)
