@@ -114,4 +114,17 @@ object List{
       case Cons(first, rest) => foldLeft(rest,f(z, first))(f)
     }
   }
+
+  // Excercise 3.11
+  def newSum(as: List[Int]): Int = {
+    foldLeft(as, 0)(_ + _)
+  }
+
+  def newProduct(as: List[Int]): Int = {
+    foldLeft(as, 1)(_ * _)
+  }
+
+  def newLength[A](as: List[A]): Int = {
+    foldLeft(as, 0)( (x, y) => x + 1 )
+  }
 }
