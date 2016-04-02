@@ -213,4 +213,19 @@ object List{
     }
     go(a1, a2, Nil)
   }
+
+  // Excercise 3.23
+  def zipWith[A, B, C](a1: List[A], a2: List[B])(f: (A,B) => C): List[C] = {
+    def go(a: List[A], b: List[B], accu: List[C]): List[C] = {
+      a match {
+        case Nil => accu
+        case Cons(aElem, aRest) =>
+          b match {
+            case Nil => accu
+            case Cons(bElem, bRest) => go(aRest, bRest, append(accu, Cons(f(aElem, bElem), Nil)))
+          }
+      }
+    }
+    go(a1, a2, Nil)
+  }
 }
