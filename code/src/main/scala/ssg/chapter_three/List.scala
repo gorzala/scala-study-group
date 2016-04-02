@@ -167,4 +167,10 @@ object List{
   def doubleList2stringList(dl: List[Double]): List[String] = {
     foldLeft(dl, Nil: List[String])( (acc, item) => append(acc, Cons(item.toString, Nil)))
   }
+
+  // Excercise 3.18
+  def map[A,B](as: List[A])(f: A => B): List[B] = {
+    foldLeft(as, Nil: List[B])( (acc, item) => append(acc, Cons(f(item), Nil)))
+  }
+  
 }
