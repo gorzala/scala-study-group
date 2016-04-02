@@ -176,7 +176,6 @@ object List{
   // Excercise 3.19
   def filter[A](as: List[A])(p: A => Boolean): List[A] = {
     def go(accu: List[A], rest: List[A]): List[A] = {
-      println(s"accu $accu rest $rest")
       rest match {
         case Nil => accu
         case Cons(i, r) if p(i) == true => go(append(accu, Cons(i, Nil)), r)
