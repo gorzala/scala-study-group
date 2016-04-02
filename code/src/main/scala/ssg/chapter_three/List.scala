@@ -127,4 +127,19 @@ object List{
   def newLength[A](as: List[A]): Int = {
     foldLeft(as, 0)( (x, y) => x + 1 )
   }
+
+  // Exercise 3.12
+  def reverse[A](as: List[A]): List[A] = {
+    def go(acc: List[A], remaining: List[A]): List[A] = {
+      remaining match {
+        case Nil => acc
+        case Cons(a, rest) => go(append(Cons(a, Nil), acc), rest)
+      }
+    }
+    go(acc = Nil, remaining = as)
+  }
+
+  def reverseWithFold[A](as: List[A]): List[A] = {
+    foldLeft(as, Nil: List[A])( (acc: List[A], current: A)  => append(Cons(current, Nil), acc) )
+  }
 }
