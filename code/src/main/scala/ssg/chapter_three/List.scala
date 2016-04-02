@@ -185,4 +185,9 @@ object List{
     }
     go(accu = Nil, rest = as)
   }
+
+  // Excercise 3.20
+  def flatMap[A,B](as: List[A])(f: A => List[B]): List[B] = {
+    foldLeft(as, Nil: List[B])( (acc, item) => append(acc, f(item)))
+  }
 }
