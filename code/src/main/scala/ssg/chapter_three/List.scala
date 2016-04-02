@@ -158,5 +158,9 @@ object List{
     )
   }
 
+  // Excercise 3.16
+  def addOne(l: List[Int]): List[Int] = {
+    foldLeft(l, Nil: List[Int])( (acc, item) => append(acc, Cons(item + 1 , Nil)))
+  }
 
 }
