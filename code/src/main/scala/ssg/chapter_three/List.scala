@@ -142,4 +142,12 @@ object List{
   def reverseWithFold[A](as: List[A]): List[A] = {
     foldLeft(as, Nil: List[A])( (acc: List[A], current: A)  => append(Cons(current, Nil), acc) )
   }
+
+  // Excercise 3.13
+  // TODO
+
+  // Excercise 3.14
+  def appendWithFold[A](a1: List[A], a2: List[A]): List[A] = {
+    foldLeft(reverseWithFold(a1), a2)((acc, elem) => Cons(elem, acc))
+  }
 }
