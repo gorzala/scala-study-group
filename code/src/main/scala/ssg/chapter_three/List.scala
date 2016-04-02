@@ -107,7 +107,11 @@ object List{
   }
 
   // Excercise 3.10
+  @annotation.tailrec
   def foldLeft[A,B](as: List[A], z: B)(f: (B, A) => B): B = {
-    
+    as match {
+      case Nil => z
+      case Cons(first, rest) => foldLeft(rest,f(z, first))(f)
+    }
   }
 }
