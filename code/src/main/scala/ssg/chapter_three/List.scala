@@ -163,4 +163,8 @@ object List{
     foldLeft(l, Nil: List[Int])( (acc, item) => append(acc, Cons(item + 1 , Nil)))
   }
 
+  // Excercise 3.17
+  def doubleList2stringList(dl: List[Double]): List[String] = {
+    foldLeft(dl, Nil: List[String])( (acc, item) => append(acc, Cons(item.toString, Nil)))
+  }
 }
