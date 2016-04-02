@@ -198,4 +198,19 @@ object List{
                   else Nil
                 )
   }
+
+  // Excercise 3.22
+  def zip(a1: List[Int], a2: List[Int]): List[Int] = {
+    def go(a: List[Int], b: List[Int], accu: List[Int]): List[Int] = {
+      a match {
+        case Nil => accu
+        case Cons(x, r1) =>
+          b match {
+            case Nil => accu
+            case Cons(y, r2) => go(r1,r2, append(accu, Cons(x +y, Nil)))
+          }
+      }
+    }
+    go(a1, a2, Nil)
+  }
 }
