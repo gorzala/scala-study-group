@@ -150,4 +150,13 @@ object List{
   def appendWithFold[A](a1: List[A], a2: List[A]): List[A] = {
     foldLeft(reverseWithFold(a1), a2)((acc, elem) => Cons(elem, acc))
   }
+
+  // Excercise 3.15
+  def flatConcatenate[A](l: List[List[A]]): List[A] = {
+    foldLeft(l, Nil: List[A])( (acc, current) =>
+      appendWithFold(acc, current)
+    )
+  }
+
+
 }
