@@ -186,27 +186,12 @@ object List {
   def filter_flatMap[A](as: List[A])(f: A => Boolean): List[A] =
     flatMap(as)((x) => if (f(x)) Cons(x,Nil) else Nil)
 
-  /** 3.22
-  def add(a1:List[Int], a2:List[Int]): List[Int] = {
-    /**
-    a1, a2 match {
-      case Nil, Nil => Nil
-      case Cons(h1,t1), Cons(h2,t2) => Cons(h1+h2,add(t1,t2))
+  /** 3.22 */
+  def add(a1:List[Int], a2:List[Int]): List[Int] =
+    (a1,a2) match {
+      case (Nil,Nil) => Nil
+      case (Nil,Cons(h,t)) => Cons(h,add(Nil,t))
+      case (Cons(h,t),Nil) => Cons(h,add(t,Nil))
+      case (Cons(h1,t1),Cons(h2,t2)) => Cons(h1+h2,add(t1,t2))
     }
-    */
-    if (a1 == Nil && a2 == Nil)
-      Nil
-    else {
-      val h1,t1 = a1 match {
-        case Nil => 0,Nil
-        case Cons(h,t) => h,t
-      }
-      val y = a2 match {
-        case Nil => 0
-        case Cons(h,t) => h
-      }
-      x + y
-    }
-  }
-  */
 }
