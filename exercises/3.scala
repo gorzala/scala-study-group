@@ -194,4 +194,13 @@ object List {
       case (Cons(h,t),Nil) => Cons(h,add(t,Nil))
       case (Cons(h1,t1),Cons(h2,t2)) => Cons(h1+h2,add(t1,t2))
     }
+
+  /** 3.23 */
+  def zipWith[A](a1:List[A], a2:List[A])(f:(A,A) => A): List[A] =
+    (a1,a2) match {
+      case (Nil,Nil) => Nil
+      case (Nil,Cons(h,t)) => Cons(h,zipWith(Nil,t)(f))
+      case (Cons(h,t),Nil) => Cons(h,zipWith(t,Nil)(f))
+      case (Cons(h1,t1),Cons(h2,t2)) => Cons(f(h1,h2),zipWith(t1,t2)(f))
+    }
 }
