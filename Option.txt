@@ -1,0 +1,46 @@
+  def mean(xs : Seq[Double]) : Option[Double] =
+    if (xs.isEmpty) None else Some(xs.sum / xs.length)
+
+mean(List(1,2,3,4))
+Some(List(1,2,3,4).sum / List(1,2,3,4).length)
+Some(10 / 4)
+Some(2.5)
+
+
+  def variance(xs : Seq[Double]) : Option[Double] =
+    mean(xs).flatMap(m => mean(xs.map(x => math.pow(x - m, 2))))
+
+variance(List(1,2,3,4))
+mean(List(1,2,3,4)).flatMap(m => mean(List(1,2,3,4).map(x => math.pow(x - m, 2))))
+Some(2.5).flatMap(m => mean(List(1,2,3,4).map(x => math.pow(x - m, 2))))
+mean(List(1,2,3,4).map(x => math.pow(x - 2.5, 2))))
+mean(List(math.pow(1 - 2.5, 2),math.pow(2 - 2.5, 2),math.pow(3 - 2.5, 2),math.pow(4 - 2.5, 2)))
+mean(List(math.pow(-1.5, 2),math.pow(-0.5, 2),math.pow(0.5, 2),math.pow(1.5, 2)))
+mean(List(2.25,0.25,0.25,2.25))
+Some(List(2.25,0.25,0.25,2.25).sum / List(2.25,0.25,0.25,2.25).length)
+Some(5 / 4)
+Some(1.25)
+
+
+  def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] ={
+    a.flatMap(a => b.map(b => f(a,b)))
+  }
+
+map2(Some(1), Some(2))((a,b) => a+b)
+Some(1).flatMap(a => Some(2).map(b => a+b)
+Some(2).map(b => 1+b)
+Some(1+2)
+Some(3)
+
+
+
+object Test {
+
+  def main(args: Array[String]): Unit = {
+    println("mean(List(1,2,3,4)): " + Option.mean(List(1,2,3,4)));
+    println("variance(List(1,2,3,4)): " + Option.variance(List(1,2,3,4)));
+    println("map2(Some(1), Some(2))((a,b) => a+b): " + Option.map2(Some(1), Some(2))((a,b) => a+b));
+    // println(": " + );
+  }
+}
+

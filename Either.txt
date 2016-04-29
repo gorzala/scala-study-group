@@ -1,0 +1,106 @@
+  def map2[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[EE, C] = {
+    this.flatMap(x => b.map(bb => f(x, bb)))
+  }
+
+Right(1).map2(Right(2))((a,b) => a+b)
+Right(1).flatMap(x => Right(2).map(bb => x+bb))
+Right(2).map(bb => 1+bb)
+Right(1+2)
+Right(3)
+
+Right(1).map2(Left("Fehler!"))((a:Int,b:Int) => a+b)
+Right(1).flatMap(x => Left("Fehler!").map(bb => x+bb))
+Left("Fehler!").map(bb => 1+bb)
+Left("Fehler!")
+
+Left("Fehler!").map2(Right(2))((a:Int,b:Int) => a+b))
+Left("Fehler!").flatMap(x => Right(2).map(bb => x+bb))
+Left("Fehler!")
+
+
+  def map2For[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[EE, C] = for {
+    x <- this
+    bb <- b
+  } yield f(x, bb)
+
+Right(1).map2For(Left("Fehler!"))((a:Int,b:Int) => a+b)
+for { x <- Right(1)
+      bb <- Left("Fehler!")
+    } yield x + bb
+Right(1).flatMap(x => Left("Fehler!").map(bb => x+bb))
+...
+
+
+  def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B = as match {
+    case Nil => z
+    case Cons(x, xs) => f(x, foldRight(xs, z)(f))
+  }
+
+foldRight(List(1,2,3), 0)(f:(a,b) => a+b)
+f(1,foldRight(List(2,3),0)(f))
+f(1,f(2,foldRight(List(3),0)(f)))
+f(1,f(2,f(3,foldRight(Nil,0)(f))))
+f(1,f(2,f(3,0)))
+f(1,f(2,(3+0)))
+f(1,(2+(3+0)))
+(1+(2+(3+0)))
+
+
+  def traverse[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] =
+    as.foldRight(Right(Nil):Either[E,List[B]])((x,acc)=> for {xx <- f(x) ; xs <- acc} yield xx :: xs)
+
+traverse(List(1,0,1))((a:Int) => if (a==1) Right(true) else if (a==0) Right(false) else Left("Neither 0 nor 1"))
+List(1,0,1).foldRight(Right(Nil))(g:(x,acc) => for { xx <- f(x) ; xs <- acc } yield xx :: xs
+List(1,0,1).foldRight(Right(Nil))(g:(x,acc) => f(x).flatMap(xx => acc.map(xs => xx :: xs)))
+g(1,List(0,1).foldRight(Right(Nil))(g))
+g(1,g(0,List(1).foldRight(Right(Nil))(g)))
+g(1,g(0,g(1,Nil.foldRight(Right(Nil))(g))))
+g(1,g(0,g(1,Right(Nil))))
+g(1,g(0,f(1).flatMap(xx => Right(Nil).map(xs => xx :: xs))))
+g(1,g(0,Right(true).flatMap(xx => Right(Nil).map(xs => xx :: xs))))
+g(1,g(0,Right(Nil).map(xs => true :: xs)))
+g(1,g(0,Right(List(true)))))
+g(1,f(0).flatMap(xx => Right(List(true)).map(xs => xx :: xs)))
+g(1,Right(false).flatMap(xx => Right(List(true)).map(xs => xx :: xs)))
+g(1,Right(List(true)).map(xs => false :: xs)))
+g(1,Right(List(false,true)))
+f(1).flatMap(xx => Right(List(false,true)).map(xs => xx :: xs))
+Right(true).flatMap(xx => Right(List(false,true)).map(xs => xx :: xs))
+Right(List(false,true)).map(xs => true :: xs)
+Right(List(true,false,true))
+
+traverse(List(1,0,3))((a:Int) => if (a==1) Right(true) else if (a==0) Right(false) else Left("Neither 0 nor 1"))
+List(1,0,3).foldRight(Right(Nil))(g:(x,acc) => for { xx <- f(x) ; xs <- acc } yield xx :: xs
+List(1,0,3).foldRight(Right(Nil))(g:(x,acc) => f(x).flatMap(xx => acc.map(xs => xx :: xs)))
+g(1,List(0,3).foldRight(Right(Nil))(g))
+g(1,g(0,List(3).foldRight(Right(Nil))(g)))
+g(1,g(0,g(3,Nil.foldRight(Right(Nil))(g))))
+g(1,g(0,g(3,Right(Nil))))
+g(1,g(0,f(3).flatMap(xx => Right(Nil).map(xs => xx :: xs))))
+g(1,g(0,Left("Neither 0 nor 1").flatMap(xx => Right(Nil).map(xs => xx :: xs))))
+g(1,g(0,Left("Neither 0 nor 1")))
+g(1,f(0).flatMap(xx => Left("Neither 0 nor 1").map(xs => xx :: xs)))
+g(1,Right(false).flatMap(xx => Left("Neither 0 nor 1").map(xs => xx :: xs)))
+g(1,Left("Neither 0 nor 1").map(xs => false :: xs)))
+g(1,Left("Neither 0 nor 1"))
+f(1).flatMap(xx => Left("Neither 0 nor 1").map(xs => xx :: xs))
+Right(true).flatMap(xx => Left("Neither 0 nor 1").map(xs => xx :: xs))
+Left("Neither 0 nor 1").map(xs => true :: xs)
+Left("Neither 0 nor 1")
+
+
+
+object Test {
+
+  def main(args: Array[String]): Unit = {
+    println("Right(1).map2(Right(2))((a,b) => a+b): " + Right(1).map2(Right(2))((a,b) => a+b));
+    println("Right(1).map2(Left(\"Fehler!\"))((a:Int,b:Int) => a+b): " + Right(1).map2(Left("Fehler!"))((a:Int,b:Int) => a+b));
+    println("Left(\"Fehler!\").map2(Right(2))((a:Int,b:Int) => a+b): " + Left("Fehler!").map2(Right(2))((a:Int,b:Int) => a+b));
+    println("Right(1).map2For(Left(\"Fehler!\"))((a:Int,b:Int) => a+b): " + Right(1).map2For(Left("Fehler!"))((a:Int,b:Int) => a+b));
+    println("traverse(List(1,0,1))((a:Int) => if (a==1) Right(true) else if (a==0) Right(false) else Left(\"Neither 0 nor 1\")): " + Either.traverse(List(1,0,1))((a:Int) => if (a==1) Right(true) else if (a==0) Right(false) else Left("Neither 0 nor 1")));
+    println("traverse(List(1,0,3))((a:Int) => if (a==1) Right(true) else if (a==0) Right(false) else Left(\"Neither 0 nor 1\")): " + Either.traverse(List(1,0,3))((a:Int) => if (a==1) Right(true) else if (a==0) Right(false) else Left("Neither 0 nor 1")));
+    // println(": " + );
+  }
+}
+
+
