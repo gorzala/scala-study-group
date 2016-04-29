@@ -11,14 +11,11 @@ sealed trait Stream[+A] {
   }
 
   /** 5.2 */
-  def drop(n:Int): Stream[A] = {
-    def tail(s:Stream[A]): Stream[A] = s match {
-      case Empty => Empty
-      case Cons(_,t) => t()
-    }
-    n match {
-      case 1 => tail(this)
-      case _ => tail(this).drop(n-1)
+  def drop(n:Int): Stream[A] = this match {
+    case Empty => Empty
+    case Cons(_,t) => n match {
+      case 1 => t()
+      case _ => t().drop(n-1)
     }
   }
 }
