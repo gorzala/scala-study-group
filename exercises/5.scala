@@ -31,6 +31,12 @@ sealed trait Stream[+A] {
     case Empty => Empty
     case Cons(h,t) => if (p(h())) Cons(h,() => t().takeWhile(p)) else Empty
   }
+
+  /** 5.4 */
+  def forAll(p: A => Boolean): Boolean = this match {
+    case Empty => true
+    case Cons(h,t) => if (p(h())) t().forAll(p) else false
+  }
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
@@ -55,6 +61,7 @@ object Test {
     println("Stream(1,2,3,5).toList: " + Stream(1,2,3,5).toList);
     println("Stream(1,2,3,5).take(2).toList: " + Stream(1,2,3,5).take(2).toList);
     println("Stream(1,2,3,5).drop(2).toList: " + Stream(1,2,3,5).drop(2).toList);
-    println("Stream(1,2,3,5).takeWhile(a => a < 5).toList: " + Stream(1,2,3,5).takeWhile(a => a < 5).toList);
+    println("Stream(1,2,3,5).takeWhile(a => { println(a); a < 3}).toList: " + Stream(1,2,3,5).takeWhile(a => { println(a); a < 3}).toList);
+    println("Stream(1,2,3,5).forAll(a => { println(a); a < 3 }): " + Stream(1,2,3,5).forAll(a => { println(a); a < 3 }));
   }
 }
