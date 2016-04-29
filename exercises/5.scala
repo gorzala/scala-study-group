@@ -25,6 +25,12 @@ sealed trait Stream[+A] {
       case _ => t().drop(n-1)
     }
   }
+
+  /** 5.3 */
+  def takeWhile(p: A => Boolean): Stream[A] = this match {
+    case Empty => Empty
+    case Cons(h,t) => if (p(h())) Cons(h,() => t().takeWhile(p)) else Empty
+  }
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
@@ -49,5 +55,6 @@ object Test {
     println("Stream(1,2,3,5).toList: " + Stream(1,2,3,5).toList);
     println("Stream(1,2,3,5).take(2).toList: " + Stream(1,2,3,5).take(2).toList);
     println("Stream(1,2,3,5).drop(2).toList: " + Stream(1,2,3,5).drop(2).toList);
+    println("Stream(1,2,3,5).takeWhile(a => a < 5).toList: " + Stream(1,2,3,5).takeWhile(a => a < 5).toList);
   }
 }
