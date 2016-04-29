@@ -37,6 +37,14 @@ sealed trait Stream[+A] {
     case Empty => true
     case Cons(h,t) => if (p(h())) t().forAll(p) else false
   }
+
+  /** 5.5 */
+  def foldRight[B](z: => B)(f: (A, => B) => B): B = this match {
+    case Cons(h,t) => f(h(), t().foldRight(z)(f))
+    case _ => z
+  }
+  def takeWhileFldR(p: A => Boolean): Stream[A] =
+    foldRight(Empty:Stream[A])((a,b) => if (p(a)) Cons(()=>a,()=>b) else Empty)
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
@@ -65,5 +73,6 @@ object Test {
     println("s.drop(2).toList: " + s.drop(2).toList);
     println("s.takeWhile(a => { println(a); a < 3}).toList: " + s.takeWhile(a => { println(a); a < 3}).toList);
     println("s.forAll(a => { println(a); a < 3 }): " + s.forAll(a => { println(a); a < 3 }));
+    println("s.takeWhileFldR(a => { println(a); a < 3}).toList: " + s.takeWhileFldR(a => { println(a); a < 3}).toList);
   }
 }
