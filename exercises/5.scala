@@ -58,10 +58,12 @@ object Stream {
 object Test {
 
   def main(args: Array[String]): Unit = {
-    println("Stream(1,2,3,5).toList: " + Stream(1,2,3,5).toList);
-    println("Stream(1,2,3,5).take(2).toList: " + Stream(1,2,3,5).take(2).toList);
-    println("Stream(1,2,3,5).drop(2).toList: " + Stream(1,2,3,5).drop(2).toList);
-    println("Stream(1,2,3,5).takeWhile(a => { println(a); a < 3}).toList: " + Stream(1,2,3,5).takeWhile(a => { println(a); a < 3}).toList);
-    println("Stream(1,2,3,5).forAll(a => { println(a); a < 3 }): " + Stream(1,2,3,5).forAll(a => { println(a); a < 3 }));
+    var s = Stream(1,2,3,4,5)
+    println("var s = Stream(1,2,3,4,5);");
+    println("s.toList: " + s.toList);
+    println("s.take(2).toList: " + s.take(2).toList);
+    println("s.drop(2).toList: " + s.drop(2).toList);
+    println("s.takeWhile(a => { println(a); a < 3}).toList: " + s.takeWhile(a => { println(a); a < 3}).toList);
+    println("s.forAll(a => { println(a); a < 3 }): " + s.forAll(a => { println(a); a < 3 }));
   }
 }
