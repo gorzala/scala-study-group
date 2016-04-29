@@ -11,6 +11,13 @@ sealed trait Stream[+A] {
   }
 
   /** 5.2 */
+  def take(n:Int): Stream[A] = this match {
+    case Empty => Empty
+    case Cons(h,t) => n match {
+      case 1 => Cons(h,() => Empty)
+      case _ => Cons(h,() => t().take(n-1))
+    }
+  }
   def drop(n:Int): Stream[A] = this match {
     case Empty => Empty
     case Cons(_,t) => n match {
@@ -40,6 +47,7 @@ object Test {
 
   def main(args: Array[String]): Unit = {
     println("Stream(1,2,3,5).toList: " + Stream(1,2,3,5).toList);
+    println("Stream(1,2,3,5).take(2).toList: " + Stream(1,2,3,5).take(2).toList);
     println("Stream(1,2,3,5).drop(2).toList: " + Stream(1,2,3,5).drop(2).toList);
   }
 }
