@@ -45,6 +45,10 @@ sealed trait Stream[+A] {
   }
   def takeWhileFldR(p: A => Boolean): Stream[A] =
     foldRight(Empty:Stream[A])((a,b) => if (p(a)) Cons(()=>a,()=>b) else Empty)
+
+  /** 5.6 */
+  def headOptionFldR: Option[A] =
+    foldRight(None:Option[A])((a,b) => Some(a))
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
@@ -74,5 +78,9 @@ object Test {
     println("s.takeWhile(a => { println(a); a < 3}).toList: " + s.takeWhile(a => { println(a); a < 3}).toList);
     println("s.forAll(a => { println(a); a < 3 }): " + s.forAll(a => { println(a); a < 3 }));
     println("s.takeWhileFldR(a => { println(a); a < 3}).toList: " + s.takeWhileFldR(a => { println(a); a < 3}).toList);
+    println("s.headOption: " + s.headOption);
+    println("s.headOptionFldR: " + s.headOptionFldR);
+    println("Empty.headOption: " + Empty.headOption);
+    println("Empty.headOptionFldR: " + Empty.headOptionFldR);
   }
 }
