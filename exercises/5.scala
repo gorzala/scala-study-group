@@ -9,6 +9,18 @@ sealed trait Stream[+A] {
     case Cons(h,t) => h() :: t().toList
     case Empty => Nil:List[A]
   }
+
+  /** 5.2 */
+  def drop(n:Int): Stream[A] = {
+    def tail(s:Stream[A]): Stream[A] = s match {
+      case Empty => Empty
+      case Cons(_,t) => t()
+    }
+    n match {
+      case 1 => tail(this)
+      case _ => tail(this).drop(n-1)
+    }
+  }
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
@@ -31,5 +43,6 @@ object Test {
 
   def main(args: Array[String]): Unit = {
     println("Stream(1,2,3,5).toList: " + Stream(1,2,3,5).toList);
+    println("Stream(1,2,3,5).drop(2).toList: " + Stream(1,2,3,5).drop(2).toList);
   }
 }
