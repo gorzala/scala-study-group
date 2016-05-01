@@ -9,14 +9,6 @@ sealed trait Option[+A] {
     }
   }
 
-  def map2[A,B,C](optA: Option[A], optB: Option[B])(f: (A,B) => C): Option[C] = {
-    optA.flatMap( aa =>
-      optB.map( bb =>
-        f(aa,bb)
-      )
-    )
-  }
-  
   def flatMap[B](f: A => Option[B]): Option[B] = {
     this.map(f).getOrElse(None)
   }
@@ -40,6 +32,22 @@ sealed trait Option[+A] {
       else
         None
     }
+  }
+}
+
+object Option {
+  def Try[A](a: => A): Option[A] = {
+    try Some(a)
+    catch {
+      case e: Exception => None
+    }
+  }
+  def map2[A,B,C](optA: Option[A], optB: Option[B])(f: (A,B) => C): Option[C] = {
+    optA.flatMap( aa =>
+      optB.map( bb =>
+        f(aa,bb)
+      )
+    )
   }
 }
 
