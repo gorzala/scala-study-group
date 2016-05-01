@@ -76,7 +76,11 @@ object Stream {
 
   def apply[A](as: A*): Stream[A] =
     if (as.isEmpty) empty else cons(as.head, apply(as.tail: _*))
+
+  /** 5.8 */
+  def constant[A](a: A): Stream[A] = Stream.cons(a, constant(a));
 }
+
 
 
 
@@ -100,5 +104,6 @@ object Test {
     println("s.append(Stream(6,7,8)).toList: " + s.append(Stream(6,7,8)).toList);
     println("s.prepend(Stream(6,7,8)).toList: " + s.prepend(Stream(6,7,8)).toList);
     println("s.flatMap((a) => Stream(a-1,a,a+1)).toList: " + s.flatMap((a) => Stream(a-1,a,a+1)).toList);
+    println(Stream.constant(5).take(5).toList);
   }
 }
