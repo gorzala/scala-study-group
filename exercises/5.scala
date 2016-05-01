@@ -88,6 +88,17 @@ object Stream {
     def calc(a:Int, b:Int): Stream[Int] = Stream.cons(a+b, calc(b, a+b))
     cons(0,cons(1,calc(0,1)))
   }
+
+  /** 5.11 */
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = 
+    f(z).map((t:(A,S)) => Stream.cons(t._1,unfold(t._2)(f))).getOrElse(Empty:Stream[A])
+
+  /** 5.12 */
+  def onesUf: Stream[Int] = unfold(1)((_) => Some((1,1)))
+  def constantUf[A](a: A): Stream[A] = unfold(a)((_) => Some((a,a)))
+  def fromUf(n: Int): Stream[Int] = unfold(n)((n) => Some((n,n+1)));
+  def fibsUf: Stream[Int] =
+    cons(0,cons(1,unfold((0,1))((t:(Int,Int)) => Some((t._1+t._2,(t._2,t._1+t._2))))))
 }
 
 
@@ -116,5 +127,9 @@ object Test {
     println("Stream.constant(5).take(5).toList: " + Stream.constant(5).take(5).toList);
     println("Stream.from(5).take(5).toList: " + Stream.from(5).take(5).toList);
     println("Stream.fibs.take(7).toList: " + Stream.fibs.take(7).toList);
+    println("Stream.onesUf.take(5).toList: " + Stream.onesUf.take(5).toList);
+    println("Stream.constantUf(5).take(5).toList: " + Stream.constantUf(5).take(5).toList);
+    println("Stream.fromUf(5).take(5).toList: " + Stream.fromUf(5).take(5).toList);
+    println("Stream.fibsUf.take(7).toList: " + Stream.fibsUf.take(7).toList);
   }
 }
