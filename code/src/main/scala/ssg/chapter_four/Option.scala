@@ -49,6 +49,13 @@ object Option {
       )
     )
   }
+
+  def sequence[A](xs: List[Option[A]]): Option[List[A]] = {
+    xs.foldRight(Some(Nil): Option[List[A]])( (accu, elem) =>
+      map2(accu, elem)( (acc, elem) =>  acc :: elem)
+    )
+  }
+
 }
 
 case class Some[+A](get: A) extends Option[A]
