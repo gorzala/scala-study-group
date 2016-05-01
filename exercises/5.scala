@@ -79,6 +79,9 @@ object Stream {
 
   /** 5.8 */
   def constant[A](a: A): Stream[A] = Stream.cons(a, constant(a));
+
+  /** 5.9 */
+  def from(n: Int): Stream[Int] = Stream.cons(n, from(n+1));
 }
 
 
@@ -104,6 +107,7 @@ object Test {
     println("s.append(Stream(6,7,8)).toList: " + s.append(Stream(6,7,8)).toList);
     println("s.prepend(Stream(6,7,8)).toList: " + s.prepend(Stream(6,7,8)).toList);
     println("s.flatMap((a) => Stream(a-1,a,a+1)).toList: " + s.flatMap((a) => Stream(a-1,a,a+1)).toList);
-    println(Stream.constant(5).take(5).toList);
+    println("Stream.constant(5).take(5).toList: " + Stream.constant(5).take(5).toList);
+    println("Stream.from(5).take(5).toList: " + Stream.from(5).take(5).toList);
   }
 }
