@@ -82,6 +82,12 @@ object Stream {
 
   /** 5.9 */
   def from(n: Int): Stream[Int] = Stream.cons(n, from(n+1));
+
+  /** 5.10 */
+  def fibs: Stream[Int] = {
+    def calc(a:Int, b:Int): Stream[Int] = Stream.cons(a+b, calc(b, a+b))
+    cons(0,cons(1,calc(0,1)))
+  }
 }
 
 
@@ -109,5 +115,6 @@ object Test {
     println("s.flatMap((a) => Stream(a-1,a,a+1)).toList: " + s.flatMap((a) => Stream(a-1,a,a+1)).toList);
     println("Stream.constant(5).take(5).toList: " + Stream.constant(5).take(5).toList);
     println("Stream.from(5).take(5).toList: " + Stream.from(5).take(5).toList);
+    println("Stream.fibs.take(7).toList: " + Stream.fibs.take(7).toList);
   }
 }
