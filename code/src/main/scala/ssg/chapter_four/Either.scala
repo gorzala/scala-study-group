@@ -54,4 +54,11 @@ object Either {
       case e: Exception => Left(e)
     }
   }
+
+  def sequence[E, A](es: List[Either[E, A]]): Either[E, List[A]] =
+    es.foldRight(Right(Nil):Either[E,List[A]])((x,acc) => for {xx <- x ; xs <- acc} yield xx :: xs)
+
+  def traverse[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] =
+    as.foldRight(Right(Nil):Either[E,List[B]])((x,acc)=> for {xx <- f(x) ; xs <- acc} yield xx :: xs)
+  
 }
