@@ -62,6 +62,13 @@ sealed trait Stream[+A] {
     s.foldRight(foldRight(Empty:Stream[B])((x,y) => Cons(()=>x,()=>y)))((x,y) => Cons(()=>x,()=>y))
   def flatMap[B](f: A => Stream[B]): Stream[B] =
     foldRight(Empty:Stream[B])((x,y) => y.prepend(f(x)))
+
+  /** 5.13 */
+  def mapUf[B](f: A => B): Stream[B] =
+    Stream.unfold(this)((as) => as match {
+      case Cons(h,t) => Some(f(h()),t())
+      case _ => None
+    })
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
@@ -131,5 +138,6 @@ object Test {
     println("Stream.constantUf(5).take(5).toList: " + Stream.constantUf(5).take(5).toList);
     println("Stream.fromUf(5).take(5).toList: " + Stream.fromUf(5).take(5).toList);
     println("Stream.fibsUf.take(7).toList: " + Stream.fibsUf.take(7).toList);
+    println("s.mapUf(_+1).toList: " + s.mapUf(_+1).toList);
   }
 }
