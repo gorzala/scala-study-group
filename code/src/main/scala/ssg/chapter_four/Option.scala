@@ -57,10 +57,30 @@ object Option {
     )
   }
 
+  def sequenceWithRec[A](xs: List[Option[A]]): Option[List[A]] = {
+    def help[A](ys: Option[List[A]],y: A ) : Option[List[A]] = ys match {
+      case None =>   None
+      case Some(yys) => Some(y::yys)
+    }
+    xs match {
+      case Nil => Some(Nil)
+      case None :: _ => None
+      case Some(x) :: xs => help(sequenceWithRec(xs), x)
+    }
+  }
+
+  def sequenceWithRecAndMap2[A](xs: List[Option[A]]): Option[List[A]] = {
+    xs match {
+      case Nil => Some(Nil)
+      case x :: xs => map2(x,sequenceWithRecAndMap2(xs))(_::_)
+    }
+  }
+
   def traverse[A,B](a:List[A])(f : A => Option[B]) : Option[List[B]]= a match {
     case Nil => Some(Nil)
     case x :: xs => map2(f(x),traverse(xs)(f))(_::_)
   }
+
 
 }
 case class Some[+A](get: A) extends Option[A]
