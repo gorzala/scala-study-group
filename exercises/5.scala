@@ -32,6 +32,11 @@ sealed trait Stream[+A] {
     case Cons(h,t) => if (p(h())) Cons(h,() => t().takeWhile(p)) else Empty
   }
 
+  def exists(p: A => Boolean): Boolean = this match {
+    case Cons(h, t) => p(h()) || t().exists(p)
+    case _ => false
+  }
+
   /** 5.4 */
   def forAll(p: A => Boolean): Boolean = this match {
     case Empty => true
@@ -95,6 +100,16 @@ sealed trait Stream[+A] {
   /** 5.14 */
   def startsWith[A](s: Stream[A]): Boolean =
     this.zipWith(s)((a,b) => a == b).foldRight(true)((a,b) => a && b)
+
+  /** 5.15 */
+  def tails: Stream[Stream[A]] =
+    Stream.unfold(this)((s) => s match {
+      case Cons(h,t) => Some((Cons(h,t),t()))
+      case _ => None
+    })
+
+  def hasSubsequence[A](s: Stream[A]): Boolean =
+    tails exists (_ startsWith s)
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
@@ -174,5 +189,10 @@ object Test {
     println("s.startsWith(Stream(1,2)): " + s.startsWith(Stream(1,2)));
     println("s.startsWith(Stream(1,2,3)): " + s.startsWith(Stream(1,2,3)));
     println("s.startsWith(Stream(2,3)): " + s.startsWith(Stream(2,3)));
+    println("s.tails.map((x) => x.toList).toList: " + s.tails.map((x) => x.toList).toList);
+    println("s.hasSubsequence(Stream(1,2,3)): " + s.hasSubsequence(Stream(1,2,3)));
+    println("s.hasSubsequence(Stream(5)): " + s.hasSubsequence(Stream(5)));
+    println("s.hasSubsequence(Stream(2,3)): " + s.hasSubsequence(Stream(2,3)));
+    println("s.hasSubsequence(Stream(4,3)): " + s.hasSubsequence(Stream(4,3)));
   }
 }
