@@ -91,6 +91,10 @@ sealed trait Stream[+A] {
       case (_,Cons(hb,tb)) => Some((None,Some(hb())),(Empty,tb()))
       case _ => None
     })
+
+  /** 5.14 */
+  def startsWith[A](s: Stream[A]): Boolean =
+    this.zipWith(s)((a,b) => a == b).foldRight(true)((a,b) => a && b)
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
@@ -166,5 +170,9 @@ object Test {
     println("s.takeWhileUf(a => { println(a); a < 3}).toList: " + s.takeWhileUf(a => { println(a); a < 3}).toList);
     println("s.zipWith(Stream(6,7,8))((a,b) => { println(a + " + " + b); a+b }).toList: " + s.zipWith(Stream(6,7,8))((a,b) => { println(a + " + " + b); a+b }).toList);
     println("s.zipAll(Stream(6,7,8)).toList: " + s.zipAll(Stream(6,7,8)).toList);
+    println("s.startsWith(Stream(1)): " + s.startsWith(Stream(1)));
+    println("s.startsWith(Stream(1,2)): " + s.startsWith(Stream(1,2)));
+    println("s.startsWith(Stream(1,2,3)): " + s.startsWith(Stream(1,2,3)));
+    println("s.startsWith(Stream(2,3)): " + s.startsWith(Stream(2,3)));
   }
 }
