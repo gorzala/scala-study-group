@@ -69,6 +69,11 @@ sealed trait Stream[+A] {
       case Cons(h,t) => Some(f(h()),t())
       case _ => None
     })
+  def takeUf(n:Int): Stream[A] =
+    Stream.unfold((this, n))((z) => if (z._2 == 0) None else z._1 match {
+      case Cons(h,t) => Some(h(),(t(),z._2-1))
+      case _ => None
+    })
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
@@ -139,5 +144,7 @@ object Test {
     println("Stream.fromUf(5).take(5).toList: " + Stream.fromUf(5).take(5).toList);
     println("Stream.fibsUf.take(7).toList: " + Stream.fibsUf.take(7).toList);
     println("s.mapUf(_+1).toList: " + s.mapUf(_+1).toList);
+    println("s.takeUf(2).toList: " + s.takeUf(2).toList);
+    println("s.takeUf(7).toList: " + s.takeUf(7).toList);
   }
 }
