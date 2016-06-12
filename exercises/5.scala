@@ -14,6 +14,7 @@ sealed trait Stream[+A] {
   def take(n:Int): Stream[A] = this match {
     case Empty => Empty
     case Cons(h,t) => n match {
+      case 0 => Empty
       case 1 => Cons(h,() => Empty)
       case _ => Cons(h,() => t().take(n-1))
     }
@@ -21,6 +22,7 @@ sealed trait Stream[+A] {
   def drop(n:Int): Stream[A] = this match {
     case Empty => Empty
     case Cons(_,t) => n match {
+      case 0 => this
       case 1 => t()
       case _ => t().drop(n-1)
     }
@@ -159,7 +161,9 @@ object Test {
     println("var s = Stream(1,2,3,4,5);");
     println("s.toList: " + s.toList);
     println("s.take(2).toList: " + s.take(2).toList);
+    println("s.take(0).toList: " + s.take(0).toList);
     println("s.drop(2).toList: " + s.drop(2).toList);
+    println("s.drop(0).toList: " + s.drop(0).toList);
     println("s.takeWhile(a => { println(a); a < 3}).toList: " + s.takeWhile(a => { println(a); a < 3}).toList);
     println("s.forAll(a => { println(a); a < 3 }): " + s.forAll(a => { println(a); a < 3 }));
     println("s.takeWhileFldR(a => { println(a); a < 3}).toList: " + s.takeWhileFldR(a => { println(a); a < 3}).toList);
