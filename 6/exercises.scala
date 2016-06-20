@@ -44,6 +44,22 @@ object RNG {
     val d3 = double(d2._2)
     ((d1._1,d2._1,d3._1),d3._2)
   }
+
+  /** 6.4 */
+  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+    if (count < 2)
+      if (count == 1) {
+        val i = nonNegativeInt(rng)
+        (i._1 :: Nil,i._2)
+      }
+      else
+        (Nil, rng)
+    else {
+      val i = nonNegativeInt(rng)
+      val l = ints(count - 1)(i._2)
+      (i._1 :: l._1,l._2)
+    }
+  }
 }
 
 
@@ -95,6 +111,10 @@ object Test {
     println(tmp2._1)
     tmp2 = RNG.double(tmp2._2)
     println(tmp2._1)
+
+    println("\n10 Non-Negative Integers")
+    var tmp3 = RNG.ints(10)(rng)
+    println(tmp3._1)
 
     println()
   }
